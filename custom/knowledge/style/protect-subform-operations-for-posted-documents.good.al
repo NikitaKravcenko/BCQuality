@@ -15,9 +15,19 @@ page 70950 "Service Comment Subform"
                     Editable = false;
 
                     trigger OnDrillDown()
+                    var
+                        ExtDescrMgt: Codeunit "GHV Extended Descr. Mgt";
+                        SelectCommentTypeMsg: Label 'Please select a comment type';
                     begin
-                        if IsPostedContext() then
+                        if Rec."Line No." = 0 then begin
+                            Message(SelectCommentTypeMsg);
                             exit;
+                        end;
+
+                        if IsPostedContext() then begin
+                            ExtDescrMgt.ShowReadOnly(Rec.GetExtendeComment(false));
+                            exit;
+                        end;
 
                         OpenExtendedCommentEditor();
                     end;
